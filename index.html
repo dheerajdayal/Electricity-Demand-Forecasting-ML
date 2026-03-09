@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Electricity Consumption Predictor</title>
+    <style>
+        /* Your existing CSS same रहता है - copy नहीं कर रहा space बचाने के लिए */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); padding: 40px; max-width: 550px; width: 100%; }
+        .header h1 { background: linear-gradient(45deg,#667eea,#764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.5em; margin-bottom: 10px; text-align: center; font-weight: 700; }
+        .header p { color: #666; font-size: 1.1em; text-align: center; margin-bottom: 30px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 0.95em; }
+        input[type="number"] { width: 100%; padding: 12px 16px; border: 2px solid #e1e5e9; border-radius: 12px; font-size: 1em; transition: all 0.3s ease; background: #f8f9fa; }
+        input[type="number"]:focus { outline: none; border-color: #667eea; background: white; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .predict-btn { width: 100%; padding: 16px; background: linear-gradient(45deg,#667eea,#764ba2); color: white; border: none; border-radius: 12px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
+        .predict-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102,126,234,0.4); }
+        .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .feature-group { background: linear-gradient(135deg,#f5f7fa,#c3cfe2); padding: 20px; border-radius: 12px; }
+        .feature-group h3 { color: #333; margin-bottom: 15px; font-size: 1em; text-align: center; font-weight: 600; }
+        .result { margin-top: 25px; padding: 25px; border-radius: 15px; text-align: center; font-weight: 700; }
+        .result.success { background: linear-gradient(135deg,#4facfe 0%,#00f2fe 100%); color: white; animation: slideIn 0.5s ease; }
+        .result.error { background: linear-gradient(135deg,#ff6b6b,#feca57); color: white; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .prediction-value { font-size: 2.5em; margin: 15px 0; font-weight: 800; }
+        @media (max-width:600px) { .features-grid { grid-template-columns: 1fr; } .container { padding: 30px 20px; } .header h1 { font-size: 2em; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ Power Predictor</h1>
+            <p>AI-Powered Electricity Consumption Forecasting</p>
+        </div>
+
+        <!-- 🔥 EXACT 11 FIELDS - NO MORE, NO LESS -->
+        <form method="POST" action="/predict">
+            <div class="features-grid">
+                <div class="feature-group">
+                    <h3>⚡ Electrical Parameters</h3>
+                    <div class="form-group">
+                        <label>Reactive Power (kVAr):</label>
+                        <input type="number" name="Global_reactive_power" step="0.01" min="0" value="0.216" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Voltage (V):</label>
+                        <input type="number" name="Voltage" step="0.1" min="200" max="250" value="234.0" required>
+                    </div>
+                </div>
+                <div class="feature-group">
+                    <h3>📊 Kitchen + Laundry</h3>
+                    <div class="form-group">
+                        <label>Kitchen (W):</label>
+                        <input type="number" name="Sub_metering_1" min="0" value="18" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Laundry (W):</label>
+                        <input type="number" name="Sub_metering_2" min="0" value="15" required>
+                    </div>
+                    <!-- 🔥 MISSING FIELD ADDED -->
+                    <div class="form-group">
+                        <label>Other Appliances (W):</label>
+                        <input type="number" name="Sub_metering_3" min="0" value="20" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-group">
+                    <h3>🕐 Time Features</h3>
+                    <div class="form-group">
+                        <label>Hour (0-23):</label>
+                        <input type="number" name="Hour" min="0" max="23" value="17" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Day (0=Mon,6=Sun):</label>
+                        <input type="number" name="DayOfWeek" min="0" max="6" value="2" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Month (1-12):</label>
+                        <input type="number" name="Month" min="1" max="12" value="12" required>
+                    </div>
+                </div>
+                <div class="feature-group">
+                    <h3>📈 Historical Data</h3>
+                    <div class="form-group">
+                        <label>Weekend (0=No,1=Yes):</label>
+                        <input type="number" name="IsWeekend" min="0" max="1" value="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>3Hr Rolling Avg (kW):</label>
+                        <input type="number" name="Rolling_3" step="0.01" min="0" value="4.21" required>
+                    </div>
+                    <div class="form-group">
+                        <label>5Hr Rolling Avg (kW):</label>
+                        <input type="number" name="Rolling_5" step="0.01" min="0" value="4.20" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="predict-btn">🔮 Predict Consumption</button>
+        </form>
+
+        <!-- RESULT DISPLAY -->
+        {% if prediction_text %}
+        <div class="result {% if 'Error' in prediction_text %}error{% else %}success{% endif %}">
+            {% if 'Error' not in prediction_text %}
+                <h2>✅ Prediction Successful!</h2>
+                <div class="prediction-value">{{ prediction_text }}</div>
+                <p><small>Global Active Power (kW)</small></p>
+            {% else %}
+                <h2>⚠️ Error</h2>
+                <p>{{ prediction_text }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
