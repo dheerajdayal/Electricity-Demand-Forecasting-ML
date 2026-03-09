@@ -59,8 +59,3 @@ def predict():
 
     return render_template("index.html", prediction_text=f"Predicted Power: {output} kW")
 
-# -------------------------
-# Run app
-# -------------------------
-if __name__ == "__main__":
-    app.run(debug=True)
