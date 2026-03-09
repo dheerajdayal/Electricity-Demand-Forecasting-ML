@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 modelpipeline = pickle.load(open(
-    r'C:\Users\Lenovo\Desktop\Electircity_consumbtionp_prediction\model\Electricity consumption prediction.ppkl',
+    r'C:\Users\Lenovo\Desktop\Electircity_consumbtionp_prediction\model\Electricity_consumption_prediction.ppkl',
     'rb'
 ))
 
@@ -51,3 +51,4 @@ def predict():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
