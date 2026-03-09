@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
 
 
-df = pd.read_csv(r"C:\Users\Lenovo\Desktop\Electircity consumbtionp prediction\dataset\household_power_consumption.csv",na_values=['?', 'nan', ''],
+df = pd.read_csv(r"C:\Users\Lenovo\Desktop\Electircity_consumbtionp_prediction\dataset\household_power_consumption.csv",na_values=['?', 'nan', ''],
                  low_memory=False,
                  header=0, 
                  nrows=10000)
